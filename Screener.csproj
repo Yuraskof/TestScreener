@@ -9,11 +9,40 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Forms\InvitationForm.cs" />
+    <Compile Remove="Forms\MainNavigationForm.cs" />
+    <Compile Remove="Forms\Pages\MessagesPage.cs" />
+    <Compile Remove="Forms\Pages\SearchPage.cs" />
+    <Compile Remove="Forms\Pages\TestPage.cs" />
+    <Compile Remove="Models\LoginUser.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\TestData\LoginUser.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aquality.Selenium" Version="4.11.0" />
+    <PackageReference Include="LiteDB" Version="5.0.15" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
-    <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
+    <PackageReference Include="NUnit.ConsoleRunner" Version="3.16.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.5.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\VisualDumps\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\TestData\TestData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
