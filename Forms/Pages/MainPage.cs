@@ -12,11 +12,7 @@ namespace Screener.Forms.Pages
     {
         private IList<ITextBox> AllPositionsTextBoxes => FormElement.FindChildElements<ITextBox>(By.XPath("//table//tbody//tr"), expectedCount: ElementsCount.MoreThenZero);
 
-        //span[contains(@class, "")]
-        private IButton AcceptCookiesButton => ElementFactory.GetButton(By.XPath("//button[@action-type= 'ACCEPT']"), "Accept cookies button");
-        private IButton LoginButton => ElementFactory.GetButton(By.XPath("//button[@class = 'sign-in-form__submit-button']"), "Login button");
-        private ITextBox LoginTextBox => ElementFactory.GetTextBox(By.XPath("//input[@autocomplete = 'username']"), "Login text box");
-        private ITextBox PasswordTextBox => ElementFactory.GetTextBox(By.XPath("//input[@autocomplete = 'current-password']"), "Password text box");
+        private ITextBox DepoValue => ElementFactory.GetTextBox(By.XPath("//section[contains(@class, \"flex flex-col gap-1\")]//div[@class = \"text-base font-medium\"]//span[contains(text(), \"₮\")]"), "Depo text box");
 
 
         public MainPage() : base(By.XPath("//section[contains(@class, \"flex\")]//div[contains(@class, \"overflow-x-auto\")]"), "Login page")
@@ -25,12 +21,7 @@ namespace Screener.Forms.Pages
 
         public void AddPositionsToDb(string positionsCollectionName, string tradesCollectionName)
         {
-            if(true)
-            {
-                // TODO Обновлено несколько секунд назад; минуту назад a minute ago a few seconds ago
-                // TODO брать общий баланс, вычислять потом размер в позиции %
-                //return;
-            }
+            decimal depo = StringUtils.Trim(DepoValue.Text);
 
             try
             {
@@ -81,7 +72,7 @@ namespace Screener.Forms.Pages
                     positions.Add(positionForDb);
                 }
 
-                DatabaseUtils.SavePosition(positions, positionsCollectionName, tradesCollectionName);
+                DatabaseUtils.SavePosition(positions, positionsCollectionName, tradesCollectionName, depo);
             }
             catch (Exception e)
             {

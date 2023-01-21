@@ -8,11 +8,12 @@ namespace Screener.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal VolumeCoin { get; set; }
-        public decimal VolumeUSDT { get; set; }
-        public string Leverage { get; set; }
-        public decimal EntryPrice { get; set; }
         public string Direction { get; set; }
+        public decimal VolumeUSDT { get; set; }
+        public decimal VolumeCoin { get; set; }
+        public decimal EntryPrice { get; set; }
+        public string Leverage { get; set; }
+        
 
         public override bool Equals(object obj)
         {

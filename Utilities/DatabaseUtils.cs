@@ -5,7 +5,7 @@ namespace Screener.Utilities
 {
     public static class DatabaseUtils
     {
-        public static void SavePosition(List<PositionModel> currentPositions, string positionsCollectionName, string tradesCollectionName)
+        public static void SavePosition(List<PositionModel> currentPositions, string positionsCollectionName, string tradesCollectionName, decimal depo)
         {
             using (var db = new LiteDatabase(@"Filename = ../../../AllTradeInfo.db; connection = shared"))
             {
@@ -33,8 +33,7 @@ namespace Screener.Utilities
 
                                 // позиция изменилась, вычисляем трейд, обновляем бд
 
-                                // TODO вычисление и запись в трейды
-                                TradeModel trade = GetTrade(positionInDb, currentPosition);
+                                TradeModel trade = GetTrade(positionInDb, currentPosition, depo);
                                 tradesCollection.Upsert(trade);
 
                                 positionInDb.EntryPrice = currentPosition.EntryPrice;
@@ -50,9 +49,7 @@ namespace Screener.Utilities
                     }
                     else // в бд есть поза, которой уже нет в текущих
                     {
-                        // TODO вычисление и запись в трейды, удаление из бд
-
-                        TradeModel trade = GetTrade(positionInDb, "Database");
+                        TradeModel trade = GetTrade(positionInDb, "Database", depo);
                         tradesCollection.Upsert(trade);
 
                         positionsCollection.Delete(positionInDb.Id);
@@ -62,11 +59,9 @@ namespace Screener.Utilities
 
                 if (currentPositions.Count > 0) // в текущих позициях остались те, которых нет в бд
                 {
-                    // TODO вычисление и запись в трейды, добавление в бд
-
                     foreach (var pos in currentPositions)
                     {
-                        TradeModel trade = GetTrade(pos, "Current");
+                        TradeModel trade = GetTrade(pos, "Current", depo);
                         tradesCollection.Upsert(trade);
 
                         positionsCollection.Upsert(pos);
@@ -77,7 +72,7 @@ namespace Screener.Utilities
             }
         }
 
-        private static TradeModel GetTrade(PositionModel position, string location)
+        private static TradeModel GetTrade(PositionModel position, string location, decimal depo)
         {
             TradeModel trade = new TradeModel();
 
@@ -87,38 +82,49 @@ namespace Screener.Utilities
             {
                 if (location == "Database")
                 {
-                    trade.Name = "Long"; // закрыл
+                    trade.Direction = "Long"; // закрыл
                 }
                 else
                 {
-                    trade.Name = "Short"; // открыл
+                    trade.Direction = "Short"; // открыл
                 }
             }
             else
             {
                 if (location == "Database")
                 {
-                    trade.Name = "Short"; // закрыл 
+                    trade.Direction = "Short"; // закрыл 
                 }
                 else
                 {
-                    trade.Name = "Long"; // открыл
+                    trade.Direction = "Long"; // открыл
                 }
             }
 
             trade.VolumeUSDT = position.VolumeUSDT;
 
+            trade.DepoPercent = GetDepoPercent(depo, trade.VolumeUSDT);
+
             trade.VolumeCoin = position.VolumeCoin;
 
-            trade.Price = position.EntryPrice;
-
+            if (location == "Database")
+            {
+                // market
+            }
+            else
+            {
+                trade.Price = position.EntryPrice;
+            }
+            
             trade.DateTimeUTC0 = DateTime.UtcNow;
+
+            trade.Depo = depo;
 
             return trade;
         }
 
 
-        private static TradeModel GetTrade(PositionModel positionInDb, PositionModel currentPosition)
+        private static TradeModel GetTrade(PositionModel positionInDb, PositionModel currentPosition, decimal depo)
         {
             TradeModel trade = new TradeModel();
 
@@ -129,32 +135,41 @@ namespace Screener.Utilities
             {
                 if (positionInDb.VolumeUSDT > currentPosition.VolumeUSDT)
                 {
-                    trade.Name = "Long"; // закрыл часть
+                    trade.Direction = "Long"; // закрыл часть
                 }
                 else
                 {
-                    trade.Name = "Short"; // добавил
+                    trade.Direction = "Short"; // добавил
                 }
             }
             else
             {
                 if (positionInDb.VolumeUSDT > currentPosition.VolumeUSDT)
                 {
-                    trade.Name = "Short"; // закрыл часть
+                    trade.Direction = "Short"; // закрыл часть
                 }
                 else
                 {
-                    trade.Name = "Long"; // добавил
+                    trade.Direction = "Long"; // добавил
                 }
             }
 
             trade.VolumeUSDT = Math.Abs(positionInDb.VolumeUSDT - currentPosition.VolumeUSDT);
 
+            trade.DepoPercent = GetDepoPercent(depo, trade.VolumeUSDT);
+
             trade.VolumeCoin = Math.Abs(positionInDb.VolumeCoin - currentPosition.VolumeCoin);
 
             trade.DateTimeUTC0 = DateTime.UtcNow;
 
+            trade.Depo = depo;
+
             return trade;
+        }
+
+        private static decimal GetDepoPercent(decimal depo, decimal positionValue)
+        {
+            return Math.Round(positionValue * 100 / depo, 2);
         }
     }
 }
