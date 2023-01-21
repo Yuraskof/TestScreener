@@ -11,16 +11,16 @@ namespace Screener
 
         public void TestWebUiAndDatabase()
         {
-            AqualityServices.Browser.GoTo(ModelUtils.modelsList[2].Url); // 0 Wan
+            AqualityServices.Browser.GoTo(ModelUtils.modelsList[0].Url); // 0 Wan
             AqualityServices.Browser.Tabs().OpenInNewTab(ModelUtils.modelsList[1].Url); // 1 Balance
-            //AqualityServices.Browser.Tabs().OpenInNewTab(ModelUtils.modelsList[2].Url); // 2 Agressive
+            AqualityServices.Browser.Tabs().OpenInNewTab(ModelUtils.modelsList[2].Url); // 2 Agressive
             AqualityServices.Browser.Maximize();
 
             MainPage mainPage = new();
 
             while (true)
             {
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     AqualityServices.Browser.Tabs().SwitchToTab(i);
                     ExecuteMethod(AqualityServices.Browser.CurrentUrl, mainPage);
@@ -33,7 +33,7 @@ namespace Screener
         {
             if (url == ModelUtils.modelsList[0].Url)
             {
-                //mainPage.AddPositionsToDb(ModelUtils.modelsList[0].PositionsTable, ModelUtils.modelsList[0].TradesTable);
+                mainPage.AddPositionsToDb(ModelUtils.modelsList[0].PositionsTable, ModelUtils.modelsList[0].TradesTable);
             }
             else if (url == ModelUtils.modelsList[1].Url)
             {
@@ -41,7 +41,7 @@ namespace Screener
             }
             else
             {
-                //mainPage.AddPositionsToDb(ModelUtils.modelsList[2].PositionsTable, ModelUtils.modelsList[2].TradesTable);
+                mainPage.AddPositionsToDb(ModelUtils.modelsList[2].PositionsTable, ModelUtils.modelsList[2].TradesTable);
             }
         } 
     }
