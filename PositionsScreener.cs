@@ -11,25 +11,25 @@ namespace Screener
 
         public void TestWebUiAndDatabase()
         {
-            AqualityServices.Browser.GoTo(ModelUtils.modelsList[0].Url); // 0 Wan
+            AqualityServices.Browser.GoTo(ModelUtils.modelsList[2].Url); // 0 Wan
             AqualityServices.Browser.Tabs().OpenInNewTab(ModelUtils.modelsList[1].Url); // 1 Balance
-            AqualityServices.Browser.Tabs().OpenInNewTab(ModelUtils.modelsList[2].Url); // 2 Agressive
+            //AqualityServices.Browser.Tabs().OpenInNewTab(ModelUtils.modelsList[2].Url); // 2 Agressive
             AqualityServices.Browser.Maximize();
 
             MainPage mainPage = new();
 
             while (true)
             {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     AqualityServices.Browser.Tabs().SwitchToTab(i);
-                    ExecuteMethod(AqualityServices.Browser.CurrentUrl);
+                    ExecuteMethod(AqualityServices.Browser.CurrentUrl, mainPage);
                 }
                 Task.Delay(40000).Wait(); // 40 sec timer
             }
         }
 
-        private void ExecuteMethod(string url)
+        private void ExecuteMethod(string url, MainPage mainPage)
         {
             if (url == ModelUtils.modelsList[0].Url)
             {
@@ -37,7 +37,7 @@ namespace Screener
             }
             else if (url == ModelUtils.modelsList[1].Url)
             {
-                //mainPage.AddPositionsToDb(ModelUtils.modelsList[1].PositionsTable, ModelUtils.modelsList[1].TradesTable);
+                mainPage.AddPositionsToDb(ModelUtils.modelsList[1].PositionsTable, ModelUtils.modelsList[1].TradesTable);
             }
             else
             {
