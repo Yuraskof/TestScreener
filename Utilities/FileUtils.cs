@@ -21,13 +21,6 @@ namespace Screener.Utilities
             }
         }
 
-        public static ByteArrayContent ReadImage(string path)
-        {
-            LoggerUtils.LogStep(nameof(ReadImage) + $" 'Image - [{path}] read'");
-            byte[] imgdata = File.ReadAllBytes(path);
-            return new(imgdata);
-        }
-
         public static string ReadFile(string path)
         {
             LoggerUtils.LogStep(nameof(ReadFile) + $" 'File - [{path}] read'");

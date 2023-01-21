@@ -15,6 +15,8 @@
     <Compile Remove="Forms\Pages\SearchPage.cs" />
     <Compile Remove="Forms\Pages\TestPage.cs" />
     <Compile Remove="Models\LoginUser.cs" />
+    <Compile Remove="Models\SessionModel.cs" />
+    <Compile Remove="Utilities\Contact.cs" />
   </ItemGroup>
 
   <ItemGroup>
