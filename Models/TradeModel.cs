@@ -7,7 +7,8 @@
         public string Direction { get; set; }
         public decimal VolumeUSDT { get; set; }
         public decimal VolumeCoin { get; set; }
-        public decimal DepoPercent { get; set; }
+        public decimal PositionDepoPercent { get; set; }
+        public decimal AllPositionsDepoPercent { get; set; }
         public decimal Price { get; set; }
         public DateTime DateTimeUTC0 { get; set; }
         public decimal Depo { get; set; }

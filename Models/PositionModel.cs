@@ -1,6 +1,4 @@
-﻿using Aquality.Selenium.Browsers;
-using Screener.Utilities;
-using System.Reflection;
+﻿using Screener.Utilities;
 
 namespace Screener.Models
 {

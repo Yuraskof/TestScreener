@@ -5,10 +5,13 @@ namespace Screener.Utilities
 {
     public static class DatabaseUtils
     {
+        private static decimal AllPositionsPercent;
         public static void SavePosition(List<PositionModel> currentPositions, string positionsCollectionName, string tradesCollectionName, decimal depo)
         {
             using (var db = new LiteDatabase(@"Filename = ../../../AllTradeInfo.db; connection = shared"))
             {
+                GetAllPositionsPercent(currentPositions, depo);
+
                 // Get a collection (or create, if doesn't exist)
                 var positionsCollection = db.GetCollection<PositionModel>(positionsCollectionName);
                 var tradesCollection = db.GetCollection<TradeModel>(tradesCollectionName);
@@ -72,6 +75,18 @@ namespace Screener.Utilities
             }
         }
 
+        private static void GetAllPositionsPercent(List<PositionModel>positions, decimal depo)
+        {
+            decimal volume = 0;
+
+            foreach (var pos in positions)
+            {
+                volume += pos.VolumeUSDT;
+            }
+
+            AllPositionsPercent = Math.Round(volume * 100 / depo, 2);
+        }
+
         private static TradeModel GetTrade(PositionModel position, string location, decimal depo)
         {
             TradeModel trade = new TradeModel();
@@ -103,7 +118,7 @@ namespace Screener.Utilities
 
             trade.VolumeUSDT = position.VolumeUSDT;
 
-            trade.DepoPercent = GetDepoPercent(depo, trade.VolumeUSDT);
+            trade.PositionDepoPercent = GetDepoPercent(depo, trade.VolumeUSDT);
 
             trade.VolumeCoin = position.VolumeCoin;
 
@@ -119,6 +134,8 @@ namespace Screener.Utilities
             trade.DateTimeUTC0 = DateTime.UtcNow;
 
             trade.Depo = depo;
+
+            trade.AllPositionsDepoPercent = AllPositionsPercent;
 
             return trade;
         }
@@ -156,13 +173,15 @@ namespace Screener.Utilities
 
             trade.VolumeUSDT = Math.Abs(positionInDb.VolumeUSDT - currentPosition.VolumeUSDT);
 
-            trade.DepoPercent = GetDepoPercent(depo, trade.VolumeUSDT);
+            trade.PositionDepoPercent = GetDepoPercent(depo, trade.VolumeUSDT);
 
             trade.VolumeCoin = Math.Abs(positionInDb.VolumeCoin - currentPosition.VolumeCoin);
 
             trade.DateTimeUTC0 = DateTime.UtcNow;
 
             trade.Depo = depo;
+
+            trade.AllPositionsDepoPercent = AllPositionsPercent;
 
             return trade;
         }
