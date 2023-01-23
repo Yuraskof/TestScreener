@@ -39,7 +39,7 @@ namespace Screener
                     dateTime = DateTime.Now;
                 }
 
-                Task.Delay(40000).Wait(); // 40 sec timer
+                Task.Delay(10000).Wait(); // 10 sec timer
             }
         }
 

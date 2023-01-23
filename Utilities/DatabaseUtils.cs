@@ -50,7 +50,7 @@ namespace Screener.Utilities
                                 positionInDb.VolumeUSDT = currentPosition.VolumeUSDT;
 
                                 positionsCollection.Upsert(positionInDb);
-                                db.Commit();
+                                //db.Commit();
 
                                 currentPositions.Remove(currentPosition);
                             }
@@ -64,7 +64,7 @@ namespace Screener.Utilities
                         tradesCollection.Upsert(trade);
 
                         positionsCollection.Delete(positionInDb.Id);
-                        db.Commit();
+                        //db.Commit();
                     }
                 }
 
@@ -80,8 +80,10 @@ namespace Screener.Utilities
                         positionsCollection.Upsert(pos);
                     }
 
-                    db.Commit();
+                    //db.Commit();
                 }
+
+                db.Commit();
             }
         }
 

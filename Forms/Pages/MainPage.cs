@@ -65,6 +65,11 @@ namespace Screener.Forms.Pages
                             case 5: // Leverage
                                 positionForDb.Leverage = PositionAllTextBoxes[i].Text;
                                 continue;
+                            case 8: // PnL
+                                positionForDb.PnL = StringUtils.Trim(PositionAllTextBoxes[i].Text);
+                                continue;
+                            default:
+                                continue;
                         }
                     }
 
