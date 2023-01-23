@@ -6,10 +6,15 @@ namespace Screener.Utilities
     public static class DatabaseUtils
     {
         private static decimal AllPositionsPercent;
+        private static List<PositionModel> AllOpenNowPositionsList;
+        private static string Log;
+
         public static void SavePosition(List<PositionModel> currentPositions, string positionsCollectionName, string tradesCollectionName, decimal depo)
         {
             using (var db = new LiteDatabase(@"Filename = ../../../AllTradeInfo.db; connection = shared"))
             {
+                AllOpenNowPositionsList = currentPositions;
+
                 GetAllPositionsPercent(currentPositions, depo);
 
                 // Get a collection (or create, if doesn't exist)
@@ -35,8 +40,9 @@ namespace Screener.Utilities
                                 }
 
                                 // позиция изменилась, вычисляем трейд, обновляем бд
+                                Log = $"Position changed. Pos in db = {positionInDb}, current position = {currentPosition}";
 
-                                TradeModel trade = GetTrade(positionInDb, currentPosition, depo);
+                                TradeModel trade = GetTrade(positionInDb, currentPosition, depo, Log);
                                 tradesCollection.Upsert(trade);
 
                                 positionInDb.EntryPrice = currentPosition.EntryPrice;
@@ -52,7 +58,9 @@ namespace Screener.Utilities
                     }
                     else // в бд есть поза, которой уже нет в текущих
                     {
-                        TradeModel trade = GetTrade(positionInDb, "Database", depo);
+                        Log = $"Position closed. Remove from db = {positionInDb}";
+
+                        TradeModel trade = GetTrade(positionInDb, "Database", depo, Log);
                         tradesCollection.Upsert(trade);
 
                         positionsCollection.Delete(positionInDb.Id);
@@ -64,7 +72,9 @@ namespace Screener.Utilities
                 {
                     foreach (var pos in currentPositions)
                     {
-                        TradeModel trade = GetTrade(pos, "Current", depo);
+                        Log = $"Position opened. Add to db = {pos}";
+
+                        TradeModel trade = GetTrade(pos, "Current", depo, Log);
                         tradesCollection.Upsert(trade);
 
                         positionsCollection.Upsert(pos);
@@ -87,7 +97,7 @@ namespace Screener.Utilities
             AllPositionsPercent = Math.Round(volume * 100 / depo, 2);
         }
 
-        private static TradeModel GetTrade(PositionModel position, string location, decimal depo)
+        private static TradeModel GetTrade(PositionModel position, string location, decimal depo, string comment)
         {
             TradeModel trade = new TradeModel();
 
@@ -137,11 +147,13 @@ namespace Screener.Utilities
 
             trade.AllPositionsDepoPercent = AllPositionsPercent;
 
+            trade.AllOpenNowPositions = AllOpenNowPositionsList;
+
             return trade;
         }
 
 
-        private static TradeModel GetTrade(PositionModel positionInDb, PositionModel currentPosition, decimal depo)
+        private static TradeModel GetTrade(PositionModel positionInDb, PositionModel currentPosition, decimal depo, string comment)
         {
             TradeModel trade = new TradeModel();
 
@@ -182,6 +194,8 @@ namespace Screener.Utilities
             trade.Depo = depo;
 
             trade.AllPositionsDepoPercent = AllPositionsPercent;
+
+            trade.AllOpenNowPositions = AllOpenNowPositionsList;
 
             return trade;
         }

@@ -7,8 +7,9 @@ namespace Screener
 {
     public class PositionsScreener : BaseTest
     {
-        [Test(Description = "Checking the website functionality using UI and Database")]
+        private DateTime dateTime = DateTime.Now;
 
+        [Test(Description = "Checking the website functionality using UI and Database")]
         public void TestWebUiAndDatabase()
         {
             AqualityServices.Browser.GoTo(ModelUtils.modelsList[0].Url); // 0 Wan
@@ -22,9 +23,22 @@ namespace Screener
             {
                 for (int i = 0; i < 3; i++)
                 {
+                    if (dateTime.AddMinutes(60) < DateTime.Now)
+                    {
+                        AqualityServices.Browser.Refresh();
+                        LoggerUtils.Logger.Info($"refresh {DateTime.Now}");
+                    }
+
                     AqualityServices.Browser.Tabs().SwitchToTab(i);
                     ExecuteMethod(AqualityServices.Browser.CurrentUrl, mainPage);
                 }
+
+                if (dateTime.AddMinutes(60) < DateTime.Now)
+                {
+                    LoggerUtils.Logger.Info($"datetime = {dateTime}, update to {DateTime.Now}");
+                    dateTime = DateTime.Now;
+                }
+
                 Task.Delay(40000).Wait(); // 40 sec timer
             }
         }

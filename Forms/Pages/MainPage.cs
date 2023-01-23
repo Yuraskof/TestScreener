@@ -1,7 +1,6 @@
 ﻿using Aquality.Selenium.Core.Elements;
 using Aquality.Selenium.Elements.Interfaces;
 using Aquality.Selenium.Forms;
-using LiteDB;
 using OpenQA.Selenium;
 using Screener.Models;
 using Screener.Utilities;

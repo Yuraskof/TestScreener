@@ -12,5 +12,7 @@
         public decimal Price { get; set; }
         public DateTime DateTimeUTC0 { get; set; }
         public decimal Depo { get; set; }
+        public List<PositionModel> AllOpenNowPositions { get; set; }
+        public string Comment { get; set; }
     }
 }
