@@ -13,7 +13,7 @@ namespace Screener.Utilities
         {
             using (var db = new LiteDatabase(@"Filename = ../../../AllTradeInfo.db; connection = shared"))
             {
-                AllOpenNowPositionsList = currentPositions;
+                AllOpenNowPositionsList = currentPositions.ToList();
 
                 GetAllPositionsPercent(currentPositions, depo);
 
