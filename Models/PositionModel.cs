@@ -11,7 +11,7 @@ namespace Screener.Models
         public decimal VolumeCoin { get; set; }
         public decimal EntryPrice { get; set; }
         public string Leverage { get; set; }
-        public decimal PnL { get; set; }
+        public string PnL { get; set; }
 
 
         public override bool Equals(object obj)

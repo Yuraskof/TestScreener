@@ -66,7 +66,7 @@ namespace Screener.Forms.Pages
                                 positionForDb.Leverage = PositionAllTextBoxes[i].Text;
                                 continue;
                             case 8: // PnL
-                                positionForDb.PnL = StringUtils.Trim(PositionAllTextBoxes[i].Text);
+                                positionForDb.PnL = PositionAllTextBoxes[i].Text;
                                 continue;
                             default:
                                 continue;
