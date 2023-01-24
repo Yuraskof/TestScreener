@@ -40,7 +40,7 @@ namespace Screener.Utilities
                                 }
 
                                 // позиция изменилась, вычисляем трейд, обновляем бд
-                                Log = $"Position changed. Pos in db = {positionInDb}, current position = {currentPosition}";
+                                Log = $"Position changed. Pos in db = {positionInDb.Name}, {positionInDb.Direction}, {positionInDb.VolumeUSDT}$, {positionInDb.EntryPrice}, current position = {currentPosition.Name}, {currentPosition.Direction}, {currentPosition.VolumeUSDT}$, {currentPosition.EntryPrice}";
 
                                 TradeModel trade = GetTrade(positionInDb, currentPosition, depo, Log);
                                 tradesCollection.Upsert(trade);
@@ -58,7 +58,7 @@ namespace Screener.Utilities
                     }
                     else // в бд есть поза, которой уже нет в текущих
                     {
-                        Log = $"Position closed. Remove from db = {positionInDb}";
+                        Log = $"Position closed. Remove from db = {positionInDb.Name}, {positionInDb.Direction}, {positionInDb.VolumeUSDT}$, {positionInDb.EntryPrice}";
 
                         TradeModel trade = GetTrade(positionInDb, "Database", depo, Log);
                         tradesCollection.Upsert(trade);
@@ -72,7 +72,7 @@ namespace Screener.Utilities
                 {
                     foreach (var pos in currentPositions)
                     {
-                        Log = $"Position opened. Add to db = {pos}";
+                        Log = $"Position opened. Add to db = {pos.Name}, {pos.Direction}, {pos.VolumeUSDT}$, {pos.EntryPrice}";
 
                         TradeModel trade = GetTrade(pos, "Current", depo, Log);
                         tradesCollection.Upsert(trade);

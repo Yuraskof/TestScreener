@@ -1,4 +1,5 @@
-﻿using Aquality.Selenium.Core.Elements;
+﻿using Aquality.Selenium.Browsers;
+using Aquality.Selenium.Core.Elements;
 using Aquality.Selenium.Elements.Interfaces;
 using Aquality.Selenium.Forms;
 using OpenQA.Selenium;
@@ -13,6 +14,8 @@ namespace Screener.Forms.Pages
 
         private ITextBox DepoValue => ElementFactory.GetTextBox(By.XPath("//section[contains(@class, \"flex flex-col gap-1\")]//div[@class = \"text-base font-medium\"]//span[contains(text(), \"₮\")]"), "Depo text box");
 
+        private IButton BlogButton => ElementFactory.GetButton(By.XPath("//a[contains(@href, \"blog\")]"), "Blog button");
+
 
         public MainPage() : base(By.XPath("//section[contains(@class, \"flex\")]//div[contains(@class, \"overflow-x-auto\")]"), "Login page")
         {
@@ -21,6 +24,8 @@ namespace Screener.Forms.Pages
         public void AddPositionsToDb(string positionsCollectionName, string tradesCollectionName)
         {
             decimal depo = StringUtils.Trim(DepoValue.Text);
+
+            BlogButton.JsActions.ScrollIntoView();
 
             try
             {
