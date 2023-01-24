@@ -11,8 +11,9 @@
         public decimal AllPositionsDepoPercent { get; set; }
         public decimal Price { get; set; }
         public DateTime DateTimeUTC0 { get; set; }
+        public int OpenPositionsCount { get; set; }
         public decimal Depo { get; set; }
-        public List<PositionModel> AllOpenNowPositions { get; set; }
         public string Comment { get; set; }
+        public List<PositionModel> AllOpenNowPositions { get; set; }
     }
 }

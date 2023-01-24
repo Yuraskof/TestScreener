@@ -153,6 +153,8 @@ namespace Screener.Utilities
 
             trade.Comment = comment;
 
+            trade.OpenPositionsCount = AllOpenNowPositionsList.Count;
+
             return trade;
         }
 
@@ -202,6 +204,8 @@ namespace Screener.Utilities
             trade.AllOpenNowPositions = AllOpenNowPositionsList;
 
             trade.Comment = comment;
+
+            trade.OpenPositionsCount = AllOpenNowPositionsList.Count;
 
             return trade;
         }
