@@ -151,6 +151,8 @@ namespace Screener.Utilities
 
             trade.AllOpenNowPositions = AllOpenNowPositionsList;
 
+            trade.Comment = comment;
+
             return trade;
         }
 
@@ -198,6 +200,8 @@ namespace Screener.Utilities
             trade.AllPositionsDepoPercent = AllPositionsPercent;
 
             trade.AllOpenNowPositions = AllOpenNowPositionsList;
+
+            trade.Comment = comment;
 
             return trade;
         }
